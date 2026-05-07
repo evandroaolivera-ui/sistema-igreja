@@ -1,6 +1,6 @@
 <?php
 
-$host = "dpg-d7udiireo5us73cvg7k0-a";
+$host = "dpg-d7udiireo5us73cvg7k0-a.render.com";
 $dbname = "igreja_db_wams";
 $user = "igreja_db_wams_user";
 $password = "lC9jH9W3cJJ0QXrk1sJBUr3Hoy2fqfJ0";
