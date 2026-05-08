@@ -13,7 +13,7 @@ $sqlFinanceiro = "SELECT SUM(valor) as total FROM financeiro";
 
 $stmtFinanceiro = $pdo->query($sqlFinanceiro);
 
-$totalFinanceiro = $stmtFinanceiro->fetch(PDO::FETCH_ASSOC)['total'];
+$totalFinanceiro = $stmtFinanceiro->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
 if (!isset($_SESSION['usuario'])) {
 
