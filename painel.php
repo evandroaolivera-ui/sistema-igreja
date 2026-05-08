@@ -14,6 +14,22 @@ $sqlFinanceiro = "SELECT SUM(valor) as total FROM financeiro";
 $stmtFinanceiro = $pdo->query($sqlFinanceiro);
 
 $totalFinanceiro = $stmtFinanceiro->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+$sqlGrafico = "SELECT tipo, SUM(valor) as total
+FROM financeiro
+GROUP BY tipo";
+
+$stmtGrafico = $pdo->query($sqlGrafico);
+
+$dadosGrafico = $stmtGrafico->fetchAll(PDO::FETCH_ASSOC);
+
+$labels = [];
+$valores = [];
+
+foreach($dadosGrafico as $item){
+
+    $labels[] = $item['tipo'];
+    $valores[] = $item['total'];
+}
 
 if (!isset($_SESSION['usuario'])) {
 
@@ -184,10 +200,37 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
         </div>
+        <div class="card" style="width:100%;">
+
+    <h2>Gráfico Financeiro</h2>
+
+    <canvas id="graficoFinanceiro"></canvas>
+
+</div>
 
     </div>
 
 </div>
+ borderWidth: 1
 
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true
+
+            }
+        }
+    }
+});
+
+</script>
 </body>
 </html>
