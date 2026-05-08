@@ -166,7 +166,10 @@ if (!isset($_SESSION['usuario'])) {
 
     <h2>Gráfico Financeiro</h2>
 
-    <canvas id="graficoFinanceiro"></canvas>
+    <canvas
+id="graficoFinanceiro"
+style="width:100%; height:400px;">
+</canvas>
 
 </div>
 
