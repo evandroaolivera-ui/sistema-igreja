@@ -162,6 +162,13 @@ if (!isset($_SESSION['usuario'])) {
         <h2>Painel Administrativo</h2>
 
         <div class="cards">
+            <div class="card" style="width:100%;">
+
+    <h2>Gráfico Financeiro</h2>
+
+    <canvas id="graficoFinanceiro"></canvas>
+
+</div>
 
            <div class="card">
 
@@ -200,14 +207,7 @@ if (!isset($_SESSION['usuario'])) {
             </div>
 
         </div>
-        <div class="card" style="width:100%;">
-
-    <h2>Gráfico Financeiro</h2>
-
-    <canvas id="graficoFinanceiro"></canvas>
-
-</div>
-
+        
     </div>
 
 </div>
