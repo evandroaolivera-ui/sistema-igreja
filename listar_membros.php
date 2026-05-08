@@ -1,5 +1,14 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+
+    header("Location: login.php");
+
+    exit;
+}
+
 require_once "config/conexao.php";
 
 $sql = "SELECT * FROM membros ORDER BY id DESC";
@@ -13,28 +22,69 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Lista de Membros</title>
 
     <style>
 
         body{
-            font-family: Arial;
-            margin:40px;
+            margin:0;
+            font-family:Arial;
+            background:#f4f6f9;
+        }
+
+        .topo{
+            background:#1e293b;
+            color:white;
+            padding:20px;
+        }
+
+        .container{
+            padding:30px;
         }
 
         table{
             width:100%;
-            border-collapse: collapse;
-        }
-
-        th, td{
-            border:1px solid #ccc;
-            padding:10px;
-            text-align:left;
+            border-collapse:collapse;
+            background:white;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
         }
 
         th{
-            background:#f0f0f0;
+            background:#1e293b;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:12px;
+            border-bottom:1px solid #ddd;
+        }
+
+        tr:hover{
+            background:#f1f5f9;
+        }
+
+        .btn{
+            padding:8px 12px;
+            border-radius:6px;
+            text-decoration:none;
+            color:white;
+            font-size:14px;
+        }
+
+        .editar{
+            background:#2563eb;
+        }
+
+        .excluir{
+            background:#dc2626;
+        }
+
+        .novo{
+            background:#16a34a;
+            display:inline-block;
+            margin-bottom:20px;
         }
 
     </style>
@@ -42,47 +92,72 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-<h1>Lista de Membros</h1>
+<div class="topo">
 
-<table>
+    <h1>Lista de Membros</h1>
 
-<tr>
-    <th>ID</th>
-    <th>Nome</th>
-    <th>Telefone</th>
-    <th>Cargo</th>
-    <th>Status</th>
-    <th>Ações</th>
-</tr>
+</div>
 
-<?php foreach($membros as $membro): ?>
+<div class="container">
 
-<tr>
+    <a href="cadastro_membro.php"
+    class="btn novo">
 
-    <td><?= $membro['id'] ?></td>
-    <td><?= $membro['nome'] ?></td>
-    <td><?= $membro['telefone'] ?></td>
-    <td><?= $membro['cargo'] ?></td>
-    <td><?= $membro['status'] ?></td>
-    <td>
-    <a href="editar_membro.php?id=<?= $membro['id'] ?>">
-        Editar
+        Novo Membro
+
     </a>
-        <br><br>
 
-<a href="excluir_membro.php?id=<?= $membro['id'] ?>"
-onclick="return confirm('Deseja excluir este membro?')">
+    <table>
 
-    Excluir
+        <tr>
 
-</a>
-</td>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Cargo</th>
+            <th>Status</th>
+            <th>Ações</th>
 
-</tr>
+        </tr>
 
-<?php endforeach; ?>
+        <?php foreach($membros as $membro): ?>
 
-</table>
+        <tr>
+
+            <td><?= $membro['id'] ?></td>
+            <td><?= $membro['nome'] ?></td>
+            <td><?= $membro['telefone'] ?></td>
+            <td><?= $membro['cargo'] ?></td>
+            <td><?= $membro['status'] ?></td>
+
+            <td>
+
+                <a
+                class="btn editar"
+                href="editar_membro.php?id=<?= $membro['id'] ?>">
+
+                    Editar
+
+                </a>
+
+                <a
+                class="btn excluir"
+                href="excluir_membro.php?id=<?= $membro['id'] ?>"
+                onclick="return confirm('Deseja excluir este membro?')">
+
+                    Excluir
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        <?php endforeach; ?>
+
+    </table>
+
+</div>
 
 </body>
 </html>
