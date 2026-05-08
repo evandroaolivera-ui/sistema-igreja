@@ -1,5 +1,14 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+
+    header("Location: login.php");
+
+    exit;
+}
+
 require_once "config/conexao.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':status' => $status
     ]);
 
-    echo "<h3>Membro cadastrado com sucesso!</h3>";
+    $sucesso = "Membro cadastrado com sucesso!";
 }
 
 ?>
@@ -35,39 +44,143 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Cadastro de Membros</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#f4f6f9;
+        }
+
+        .topo{
+            background:#1e293b;
+            color:white;
+            padding:20px;
+        }
+
+        .container{
+            max-width:700px;
+            margin:30px auto;
+            background:white;
+            padding:30px;
+            border-radius:12px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        input,
+        textarea,
+        select{
+            width:100%;
+            padding:12px;
+            margin-top:5px;
+            margin-bottom:20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+        }
+
+        button{
+            background:#1e293b;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#334155;
+        }
+
+        .sucesso{
+            background:#dcfce7;
+            color:#166534;
+            padding:15px;
+            border-radius:8px;
+            margin-bottom:20px;
+        }
+
+        .voltar{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            color:#1e293b;
+        }
+
+    </style>
+
 </head>
 <body>
 
-<h1>Cadastro de Membros</h1>
+<div class="topo">
 
-<form method="POST">
+    <h1>Cadastro de Membros</h1>
 
-    <label>Nome:</label><br>
-    <input type="text" name="nome" required><br><br>
+</div>
 
-    <label>Telefone:</label><br>
-    <input type="text" name="telefone"><br><br>
+<div class="container">
 
-    <label>Endereço:</label><br>
-    <textarea name="endereco"></textarea><br><br>
+    <?php if(isset($sucesso)): ?>
 
-    <label>Cargo:</label><br>
-    <input type="text" name="cargo"><br><br>
+        <div class="sucesso">
+            <?= $sucesso ?>
+        </div>
 
-    <label>Data de Batismo:</label><br>
-    <input type="date" name="data_batismo"><br><br>
+    <?php endif; ?>
 
-    <label>Status:</label><br>
-    <select name="status">
-        <option>Ativo</option>
-        <option>Visitante</option>
-        <option>Desviado</option>
-    </select><br><br>
+    <form method="POST">
 
-    <button type="submit">Cadastrar</button>
+        <label>Nome</label>
 
-</form>
+        <input type="text"
+        name="nome"
+        required>
+
+        <label>Telefone</label>
+
+        <input type="text"
+        name="telefone">
+
+        <label>Endereço</label>
+
+        <textarea name="endereco"></textarea>
+
+        <label>Cargo</label>
+
+        <input type="text"
+        name="cargo">
+
+        <label>Data de Batismo</label>
+
+        <input type="date"
+        name="data_batismo">
+
+        <label>Status</label>
+
+        <select name="status">
+
+            <option>Ativo</option>
+            <option>Visitante</option>
+            <option>Desviado</option>
+
+        </select>
+
+        <button type="submit">
+            Cadastrar Membro
+        </button>
+
+    </form>
+
+    <a class="voltar"
+    href="listar_membros.php">
+
+        ← Voltar para lista
+
+    </a>
+
+</div>
 
 </body>
 </html>
