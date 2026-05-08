@@ -127,6 +127,13 @@ if (!isset($_SESSION['usuario'])) {
         <a href="listar_membros.php">
             Listar Membros
         </a>
+        <a href="financeiro.php">
+    Novo Lançamento
+</a>
+
+<a href="listar_financeiro.php">
+    Relatório Financeiro
+</a>
 
         <a href="logout.php">
             Sair do Sistema
