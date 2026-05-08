@@ -68,6 +68,14 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="editar_membro.php?id=<?= $membro['id'] ?>">
         Editar
     </a>
+        <br><br>
+
+<a href="excluir_membro.php?id=<?= $membro['id'] ?>"
+onclick="return confirm('Deseja excluir este membro?')">
+
+    Excluir
+
+</a>
 </td>
 
 </tr>
