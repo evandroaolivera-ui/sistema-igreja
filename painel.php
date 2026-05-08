@@ -1,6 +1,19 @@
 <?php
 
 session_start();
+require_once "config/conexao.php";
+
+$sqlMembros = "SELECT COUNT(*) as total FROM membros";
+
+$stmtMembros = $pdo->query($sqlMembros);
+
+$totalMembros = $stmtMembros->fetch(PDO::FETCH_ASSOC)['total'];
+
+$sqlFinanceiro = "SELECT SUM(valor) as total FROM financeiro";
+
+$stmtFinanceiro = $pdo->query($sqlFinanceiro);
+
+$totalFinanceiro = $stmtFinanceiro->fetch(PDO::FETCH_ASSOC)['total'];
 
 if (!isset($_SESSION['usuario'])) {
 
