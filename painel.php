@@ -154,14 +154,18 @@ if (!isset($_SESSION['usuario'])) {
 
             <div class="card">
 
-                <h2>Financeiro</h2>
+    <h2>
 
-                <p>
-                    Controle dízimos e ofertas.
-                </p>
+        R$
+        <?= number_format($totalFinanceiro,2,',','.') ?>
 
-            </div>
+    </h2>
 
+    <p>
+        Total arrecadado
+    </p>
+
+</div>
             <div class="card">
 
                 <h2>Relatórios</h2>
