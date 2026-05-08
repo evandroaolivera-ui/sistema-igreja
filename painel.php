@@ -222,6 +222,7 @@ style="width:100%; height:400px;">
     options: {
 
         responsive: true,
+    maintainAspectRatio: false,
 
         scales: {
 
