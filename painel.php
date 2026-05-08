@@ -140,15 +140,17 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="cards">
 
-            <div class="card">
+           <div class="card">
 
-                <h2>Membros</h2>
+    <h2>
+        <?= $totalMembros ?>
+    </h2>
 
-                <p>
-                    Gerencie os membros da igreja.
-                </p>
+    <p>
+        Membros cadastrados
+    </p>
 
-            </div>
+</div>
 
             <div class="card">
 
