@@ -52,6 +52,7 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <th>Telefone</th>
     <th>Cargo</th>
     <th>Status</th>
+    <th>Ações</th>
 </tr>
 
 <?php foreach($membros as $membro): ?>
@@ -63,6 +64,11 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <td><?= $membro['telefone'] ?></td>
     <td><?= $membro['cargo'] ?></td>
     <td><?= $membro['status'] ?></td>
+    <td>
+    <a href="editar_membro.php?id=<?= $membro['id'] ?>">
+        Editar
+    </a>
+</td>
 
 </tr>
 
