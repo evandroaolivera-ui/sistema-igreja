@@ -40,6 +40,11 @@ Bem-vindo,
     </li>
 
 </ul>
+   <br><br>
+
+<a href="logout.php">
+    Sair do Sistema
+</a> 
 
 </body>
 </html>
