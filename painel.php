@@ -162,7 +162,7 @@ if (!isset($_SESSION['usuario'])) {
         <h2>Painel Administrativo</h2>
 
         <div class="cards">
-            <div class="card" style="width:100%;">
+           <div class="card" style="width:100%;">
 
     <h2>Gráfico Financeiro</h2>
 
