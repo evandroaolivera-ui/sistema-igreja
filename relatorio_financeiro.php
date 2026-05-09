@@ -19,7 +19,7 @@ $sql = "
 SELECT
     membro,
     tipo,
-    SUM(valor) as total
+    COALESCE(SUM(valor),0) as total
 
 FROM financeiro
 
@@ -361,7 +361,7 @@ button:hover{
 
             <?php foreach($relatorio as $item): ?>
 
-            <?php $totalGeral += $item['total']; ?>
+            <?php $totalGeral += (float)$item['total']; ?>
 
             <tr>
 
@@ -376,7 +376,7 @@ button:hover{
                 <td class="total">
 
                     R$
-                    <?= number_format($item['total'],2,',','.') ?>
+                    <?= number_format((float)$item['total'],2,',','.') ?>
 
                 </td>
 
