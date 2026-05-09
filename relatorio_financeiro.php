@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 require_once "config/conexao.php";
 
 $mes = $_GET['mes'] ?? date('m');
-$membroFiltro = $_GET['membro'] ?? '';
+$buscaMembro = $_GET['busca_membro'] ?? '';
 
 $sql = "
 
@@ -24,7 +24,16 @@ SELECT
 FROM financeiro
 
 WHERE EXTRACT(MONTH FROM data_lancamento) = :mes
-AND (:membro = '' OR membro = :membro)
+
+";
+
+if($buscaMembro != ''){
+
+    $sql .= " AND membro ILIKE :membro ";
+
+}
+
+$sql .= "
 
 GROUP BY membro, tipo
 
@@ -34,22 +43,19 @@ ORDER BY membro ASC
 
 $stmt = $pdo->prepare($sql);
 
-$stmt->execute([
-    ':mes' => $mes,
-    ':membro' => $membroFiltro
-]);
+$params = [
+    ':mes' => $mes
+];
+
+if($buscaMembro != ''){
+
+    $params[':membro'] = "%".$buscaMembro."%";
+
+}
+
+$stmt->execute($params);
 
 $relatorio = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$sqlMembros = "
-SELECT DISTINCT membro
-FROM financeiro
-ORDER BY membro ASC
-";
-
-$stmtMembros = $pdo->query($sqlMembros);
-
-$membrosLista = $stmtMembros->fetchAll(PDO::FETCH_ASSOC);
 
 $totalGeral = 0;
 
@@ -120,7 +126,8 @@ form{
     flex-wrap:wrap;
 }
 
-select{
+select,
+input{
     padding:10px;
     border-radius:8px;
     border:1px solid #ccc;
@@ -191,6 +198,7 @@ button:hover{
 
     button,
     select,
+    input,
     label{
         display:none;
     }
@@ -263,28 +271,14 @@ button:hover{
 
             </select>
 
-            <select name="membro">
-
-                <option value="">
-                    Todos os membros
-                </option>
-
-                <?php foreach($membrosLista as $m): ?>
-
-                <option
-                value="<?= $m['membro'] ?>"
-                <?= $membroFiltro == $m['membro'] ? 'selected' : '' ?>>
-
-                    <?= $m['membro'] ?>
-
-                </option>
-
-                <?php endforeach; ?>
-
-            </select>
+            <input
+            type="text"
+            name="busca_membro"
+            placeholder="Digite o nome do membro"
+            value="<?= $buscaMembro ?>">
 
             <button type="submit">
-                Filtrar
+                Pesquisar
             </button>
 
             <button
@@ -302,12 +296,12 @@ button:hover{
             <strong>Mês selecionado:</strong>
             <?= $mes ?>
 
-            <?php if($membroFiltro != ''): ?>
+            <?php if($buscaMembro != ''): ?>
 
                 <br>
 
-                <strong>Membro:</strong>
-                <?= $membroFiltro ?>
+                <strong>Pesquisa:</strong>
+                <?= $buscaMembro ?>
 
             <?php endif; ?>
 
