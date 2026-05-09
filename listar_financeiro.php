@@ -21,8 +21,11 @@ $lancamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
+
+    <meta charset="UTF-8">
 
     <title>Financeiro</title>
 
@@ -49,17 +52,21 @@ $lancamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-collapse:collapse;
             background:white;
             box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            border-radius:12px;
+            overflow:hidden;
         }
 
         th{
             background:#166534;
             color:white;
             padding:15px;
+            text-align:center;
         }
 
         td{
-            padding:12px;
+            padding:15px;
             border-bottom:1px solid #ddd;
+            text-align:center;
         }
 
         tr:hover{
@@ -69,16 +76,27 @@ $lancamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .novo{
             background:#16a34a;
             color:white;
-            padding:10px 15px;
+            padding:12px 18px;
             border-radius:8px;
             text-decoration:none;
             display:inline-block;
             margin-bottom:20px;
+            transition:0.3s;
+        }
+
+        .novo:hover{
+            background:#15803d;
+        }
+
+        .valor{
+            font-weight:bold;
+            color:#166534;
         }
 
     </style>
 
 </head>
+
 <body>
 
 <div class="topo">
@@ -112,18 +130,28 @@ $lancamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <tr>
 
-            <td><?= $item['id'] ?></td>
-
-            <td><?= $item['membro'] ?></td>
-
-            <td><?= $item['tipo'] ?></td>
-
             <td>
-                R$
-                <?= number_format($item['valor'],2,',','.') ?>
+                <?= $item['id'] ?>
             </td>
 
-            <td><?= $item['data_lancamento'] ?></td>
+            <td>
+                <?= $item['membro'] ?>
+            </td>
+
+            <td>
+                <?= $item['tipo'] ?>
+            </td>
+
+            <td class="valor">
+
+                R$
+                <?= number_format($item['valor'],2,',','.') ?>
+
+            </td>
+
+            <td>
+                <?= $item['data_lancamento'] ?>
+            </td>
 
         </tr>
 
