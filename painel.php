@@ -166,10 +166,11 @@ if (!isset($_SESSION['usuario'])) {
 
     <h2>Gráfico Financeiro</h2>
 
-    <canvas
-id="graficoFinanceiro"
-style="width:100%; height:400px;">
-</canvas>
+  <div style="height:300px;">
+
+    <canvas id="graficoFinanceiro"></canvas>
+
+</div>
 
 </div>
 
@@ -209,32 +210,26 @@ style="width:100%; height:400px;">
 
             </div>
 
-        </div>
-        
-    </div>
-
-</div>
- borderWidth: 1
-
-        }]
-    },
-
-    options: {
-
         responsive: true,
-    maintainAspectRatio: false,
 
-        scales: {
+            maintainAspectRatio: false,
 
-            y: {
+            scales: {
 
-                beginAtZero: true
+                y: {
 
+                    beginAtZero: true
+
+                }
             }
         }
-    }
+    });
+
 });
 
 </script>
+
+</body>
+</html>
 </body>
 </html>
