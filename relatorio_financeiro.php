@@ -12,6 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 require_once "config/conexao.php";
 
 $mes = $_GET['mes'] ?? date('m');
+$membroFiltro = $_GET['membro'] ?? '';
 
 $sql = "
 
@@ -23,6 +24,7 @@ SELECT
 FROM financeiro
 
 WHERE EXTRACT(MONTH FROM data_lancamento) = :mes
+AND (:membro = '' OR membro = :membro)
 
 GROUP BY membro, tipo
 
@@ -33,10 +35,21 @@ ORDER BY membro ASC
 $stmt = $pdo->prepare($sql);
 
 $stmt->execute([
-    ':mes' => $mes
+    ':mes' => $mes,
+    ':membro' => $membroFiltro
 ]);
 
 $relatorio = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sqlMembros = "
+SELECT DISTINCT membro
+FROM financeiro
+ORDER BY membro ASC
+";
+
+$stmtMembros = $pdo->query($sqlMembros);
+
+$membrosLista = $stmtMembros->fetchAll(PDO::FETCH_ASSOC);
 
 $totalGeral = 0;
 
@@ -111,6 +124,7 @@ select{
     padding:10px;
     border-radius:8px;
     border:1px solid #ccc;
+    min-width:180px;
 }
 
 button{
@@ -138,7 +152,32 @@ button:hover{
     font-weight:bold;
 }
 
+.relatorio-info{
+    margin-top:20px;
+    margin-bottom:20px;
+    padding:15px;
+    background:#ecfdf5;
+    border-left:5px solid #166534;
+    border-radius:8px;
+}
+
+.titulo-impressao{
+    display:none;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.data-impressao{
+    font-size:14px;
+    color:#555;
+}
+
 @media print {
+
+    @page{
+        size:A4;
+        margin:15mm;
+    }
 
     body{
         background:white;
@@ -156,7 +195,21 @@ button:hover{
         display:none;
     }
 
+    .titulo-impressao{
+        display:block;
+    }
+
+    table{
+        font-size:14px;
+    }
+
+    th{
+        background:#166534 !important;
+        color:white !important;
+    }
+
     .card{
+        padding:0;
         box-shadow:none;
         border:none;
     }
@@ -179,6 +232,16 @@ button:hover{
 
     <div class="card">
 
+        <div class="titulo-impressao">
+
+            <h1>Relatório Financeiro da Igreja</h1>
+
+            <p class="data-impressao">
+                Emitido em <?= date('d/m/Y H:i') ?>
+            </p>
+
+        </div>
+
         <form method="GET">
 
             <label>Mês:</label>
@@ -200,6 +263,26 @@ button:hover{
 
             </select>
 
+            <select name="membro">
+
+                <option value="">
+                    Todos os membros
+                </option>
+
+                <?php foreach($membrosLista as $m): ?>
+
+                <option
+                value="<?= $m['membro'] ?>"
+                <?= $membroFiltro == $m['membro'] ? 'selected' : '' ?>>
+
+                    <?= $m['membro'] ?>
+
+                </option>
+
+                <?php endforeach; ?>
+
+            </select>
+
             <button type="submit">
                 Filtrar
             </button>
@@ -213,6 +296,22 @@ button:hover{
             </button>
 
         </form>
+
+        <div class="relatorio-info">
+
+            <strong>Mês selecionado:</strong>
+            <?= $mes ?>
+
+            <?php if($membroFiltro != ''): ?>
+
+                <br>
+
+                <strong>Membro:</strong>
+                <?= $membroFiltro ?>
+
+            <?php endif; ?>
+
+        </div>
 
         <table>
 
