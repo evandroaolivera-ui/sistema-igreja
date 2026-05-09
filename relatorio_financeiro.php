@@ -81,6 +81,7 @@ th{
     background:#166534;
     color:white;
     padding:15px;
+    text-align:center;
 }
 
 td{
@@ -89,13 +90,22 @@ td{
     text-align:center;
 }
 
+tr:hover{
+    background:#f1f5f9;
+}
+
 form{
     margin-bottom:20px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
 select{
     padding:10px;
     border-radius:8px;
+    border:1px solid #ccc;
 }
 
 button{
@@ -105,6 +115,7 @@ button{
     color:white;
     border-radius:8px;
     cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
@@ -114,6 +125,31 @@ button:hover{
 .total{
     font-weight:bold;
     color:#166534;
+}
+
+@media print {
+
+    body{
+        background:white;
+    }
+
+    .topo{
+        background:white;
+        color:black;
+        border-bottom:2px solid black;
+    }
+
+    button,
+    select,
+    label{
+        display:none;
+    }
+
+    .card{
+        box-shadow:none;
+        border:none;
+    }
+
 }
 
 </style>
@@ -155,6 +191,14 @@ button:hover{
 
             <button type="submit">
                 Filtrar
+            </button>
+
+            <button
+            type="button"
+            onclick="window.print()">
+
+                Imprimir
+
             </button>
 
         </form>
