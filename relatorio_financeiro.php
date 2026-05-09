@@ -57,6 +57,16 @@ $stmt->execute($params);
 
 $relatorio = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$sqlBusca = "
+SELECT DISTINCT membro
+FROM financeiro
+ORDER BY membro ASC
+";
+
+$stmtBusca = $pdo->query($sqlBusca);
+
+$membrosBusca = $stmtBusca->fetchAll(PDO::FETCH_ASSOC);
+
 $totalGeral = 0;
 
 ?>
@@ -131,7 +141,7 @@ input{
     padding:10px;
     border-radius:8px;
     border:1px solid #ccc;
-    min-width:180px;
+    min-width:220px;
 }
 
 button{
@@ -179,6 +189,29 @@ button:hover{
     color:#555;
 }
 
+#resultadoBusca{
+    position:absolute;
+    background:white;
+    width:100%;
+    max-height:200px;
+    overflow-y:auto;
+    border:1px solid #ccc;
+    border-radius:8px;
+    z-index:999;
+    margin-top:5px;
+    display:none;
+}
+
+.itemBusca{
+    padding:10px;
+    cursor:pointer;
+    border-bottom:1px solid #eee;
+}
+
+.itemBusca:hover{
+    background:#f1f5f9;
+}
+
 @media print {
 
     @page{
@@ -199,7 +232,8 @@ button:hover{
     button,
     select,
     input,
-    label{
+    label,
+    #resultadoBusca{
         display:none;
     }
 
@@ -271,11 +305,19 @@ button:hover{
 
             </select>
 
-            <input
-            type="text"
-            name="busca_membro"
-            placeholder="Digite o nome do membro"
-            value="<?= $buscaMembro ?>">
+            <div style="position:relative;">
+
+                <input
+                type="text"
+                id="buscaMembro"
+                name="busca_membro"
+                placeholder="Digite o nome do membro"
+                value="<?= $buscaMembro ?>"
+                autocomplete="off">
+
+                <div id="resultadoBusca"></div>
+
+            </div>
 
             <button type="submit">
                 Pesquisar
@@ -362,6 +404,69 @@ button:hover{
     </div>
 
 </div>
+
+<script>
+
+const membros = [
+
+<?php foreach($membrosBusca as $m): ?>
+
+    "<?= addslashes($m['membro']) ?>",
+
+<?php endforeach; ?>
+
+];
+
+const input = document.getElementById('buscaMembro');
+const resultado = document.getElementById('resultadoBusca');
+
+input.addEventListener('keyup', function(){
+
+    let valor = this.value.toLowerCase();
+
+    resultado.innerHTML = '';
+
+    if(valor == ''){
+
+        resultado.style.display = 'none';
+        return;
+    }
+
+    let filtrados = membros.filter(nome =>
+        nome.toLowerCase().includes(valor)
+    );
+
+    if(filtrados.length > 0){
+
+        resultado.style.display = 'block';
+
+        filtrados.forEach(nome => {
+
+            let div = document.createElement('div');
+
+            div.classList.add('itemBusca');
+
+            div.innerText = nome;
+
+            div.onclick = function(){
+
+                input.value = nome;
+
+                resultado.style.display = 'none';
+            }
+
+            resultado.appendChild(div);
+
+        });
+
+    }else{
+
+        resultado.style.display = 'none';
+    }
+
+});
+
+</script>
 
 </body>
 </html>
