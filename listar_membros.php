@@ -20,8 +20,11 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
+
+    <meta charset="UTF-8">
 
     <title>Lista de Membros</title>
 
@@ -48,17 +51,21 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-collapse:collapse;
             background:white;
             box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            border-radius:12px;
+            overflow:hidden;
         }
 
         th{
             background:#1e293b;
             color:white;
             padding:15px;
+            text-align:center;
         }
 
         td{
-            padding:12px;
+            padding:15px;
             border-bottom:1px solid #ddd;
+            text-align:center;
         }
 
         tr:hover{
@@ -71,14 +78,24 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-decoration:none;
             color:white;
             font-size:14px;
+            display:inline-block;
+            transition:0.3s;
         }
 
         .editar{
             background:#2563eb;
         }
 
+        .editar:hover{
+            background:#1d4ed8;
+        }
+
         .excluir{
             background:#dc2626;
+        }
+
+        .excluir:hover{
+            background:#b91c1c;
         }
 
         .novo{
@@ -87,9 +104,25 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-bottom:20px;
         }
 
+        .novo:hover{
+            background:#15803d;
+        }
+
+        .status{
+            font-weight:bold;
+            color:#16a34a;
+        }
+
+        .acoes{
+            display:flex;
+            justify-content:center;
+            gap:10px;
+        }
+
     </style>
 
 </head>
+
 <body>
 
 <div class="topo">
@@ -124,30 +157,48 @@ $membros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <tr>
 
-            <td><?= $membro['id'] ?></td>
-            <td><?= $membro['nome'] ?></td>
-            <td><?= $membro['telefone'] ?></td>
-            <td><?= $membro['cargo'] ?></td>
-            <td><?= $membro['status'] ?></td>
+            <td>
+                <?= $membro['id'] ?>
+            </td>
+
+            <td>
+                <?= $membro['nome'] ?>
+            </td>
+
+            <td>
+                <?= $membro['telefone'] ?>
+            </td>
+
+            <td>
+                <?= $membro['cargo'] ?>
+            </td>
+
+            <td class="status">
+                <?= $membro['status'] ?>
+            </td>
 
             <td>
 
-                <a
-                class="btn editar"
-                href="editar_membro.php?id=<?= $membro['id'] ?>">
+                <div class="acoes">
 
-                    Editar
+                    <a
+                    class="btn editar"
+                    href="editar_membro.php?id=<?= $membro['id'] ?>">
 
-                </a>
+                        Editar
 
-                <a
-                class="btn excluir"
-                href="excluir_membro.php?id=<?= $membro['id'] ?>"
-                onclick="return confirm('Deseja excluir este membro?')">
+                    </a>
 
-                    Excluir
+                    <a
+                    class="btn excluir"
+                    href="excluir_membro.php?id=<?= $membro['id'] ?>"
+                    onclick="return confirm('Deseja excluir este membro?')">
 
-                </a>
+                        Excluir
+
+                    </a>
+
+                </div>
 
             </td>
 
