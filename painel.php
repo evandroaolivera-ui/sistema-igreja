@@ -3,6 +3,12 @@
 session_start();
 require_once "config/conexao.php";
 
+if (!isset($_SESSION['usuario'])) {
+
+    header("Location: login.php");
+    exit;
+}
+
 $sqlMembros = "SELECT COUNT(*) as total FROM membros";
 
 $stmtMembros = $pdo->query($sqlMembros);
@@ -14,6 +20,7 @@ $sqlFinanceiro = "SELECT SUM(valor) as total FROM financeiro";
 $stmtFinanceiro = $pdo->query($sqlFinanceiro);
 
 $totalFinanceiro = $stmtFinanceiro->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
 $sqlGrafico = "SELECT tipo, SUM(valor) as total
 FROM financeiro
 GROUP BY tipo";
@@ -31,18 +38,14 @@ foreach($dadosGrafico as $item){
     $valores[] = $item['total'];
 }
 
-if (!isset($_SESSION['usuario'])) {
-
-    header("Location: login.php");
-
-    exit;
-}
-
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
+
 <head>
+
+    <meta charset="UTF-8">
 
     <title>Painel da Igreja</title>
 
@@ -78,6 +81,7 @@ if (!isset($_SESSION['usuario'])) {
             padding:15px;
             margin:5px 10px;
             border-radius:8px;
+            transition:0.3s;
         }
 
         .menu a:hover{
@@ -112,9 +116,14 @@ if (!isset($_SESSION['usuario'])) {
             color:#666;
         }
 
+        .grafico-card{
+            width:100%;
+        }
+
     </style>
 
 </head>
+
 <body>
 
 <div class="topo">
@@ -143,13 +152,14 @@ if (!isset($_SESSION['usuario'])) {
         <a href="listar_membros.php">
             Listar Membros
         </a>
-        <a href="financeiro.php">
-    Novo Lançamento
-</a>
 
-<a href="listar_financeiro.php">
-    Relatório Financeiro
-</a>
+        <a href="financeiro.php">
+            Novo Lançamento
+        </a>
+
+        <a href="listar_financeiro.php">
+            Relatório Financeiro
+        </a>
 
         <a href="logout.php">
             Sair do Sistema
@@ -162,44 +172,46 @@ if (!isset($_SESSION['usuario'])) {
         <h2>Painel Administrativo</h2>
 
         <div class="cards">
-           <div class="card" style="width:100%;">
 
-    <h2>Gráfico Financeiro</h2>
+            <div class="card grafico-card">
 
-  <div style="height:300px;">
+                <h2>Gráfico Financeiro</h2>
 
-    <canvas id="graficoFinanceiro"></canvas>
+                <div style="height:300px; margin-top:20px;">
 
-</div>
+                    <canvas id="graficoFinanceiro"></canvas>
 
-</div>
+                </div>
 
-           <div class="card">
-
-    <h2>
-        <?= $totalMembros ?>
-    </h2>
-
-    <p>
-        Membros cadastrados
-    </p>
-
-</div>
+            </div>
 
             <div class="card">
 
-    <h2>
+                <h2>
+                    <?= $totalMembros ?>
+                </h2>
 
-        R$
-        <?= number_format($totalFinanceiro,2,',','.') ?>
+                <p>
+                    Membros cadastrados
+                </p>
 
-    </h2>
+            </div>
 
-    <p>
-        Total arrecadado
-    </p>
+            <div class="card">
 
-</div>
+                <h2>
+
+                    R$
+                    <?= number_format($totalFinanceiro,2,',','.') ?>
+
+                </h2>
+
+                <p>
+                    Total arrecadado
+                </p>
+
+            </div>
+
             <div class="card">
 
                 <h2>Relatórios</h2>
@@ -210,26 +222,69 @@ if (!isset($_SESSION['usuario'])) {
 
             </div>
 
-        responsive: true,
+        </div>
 
-            maintainAspectRatio: false,
+    </div>
 
-            scales: {
+</div>
 
-                y: {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-                    beginAtZero: true
+<script>
 
+document.addEventListener("DOMContentLoaded", function(){
+
+    const canvas = document.getElementById('graficoFinanceiro');
+
+    if(canvas){
+
+        const ctx = canvas.getContext('2d');
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: <?= json_encode($labels) ?>,
+
+                datasets: [{
+
+                    label: 'Total Arrecadado',
+
+                    data: <?= json_encode($valores) ?>,
+
+                    backgroundColor: [
+                        '#2563eb',
+                        '#16a34a',
+                        '#dc2626',
+                        '#ca8a04'
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
 });
 
 </script>
 
-</body>
-</html>
 </body>
 </html>
